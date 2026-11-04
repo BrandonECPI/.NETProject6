@@ -1,63 +1,70 @@
-using SQLite;
 using MAUI_Data_Access.Models;
+using Newtonsoft.Json;
 
 namespace MAUI_Data_Access.DataAccess
 {
     /// <summary>
-    /// Data access layer: reads and saves Person records in SQLite.
+    /// Data access layer: gets and saves people through the REST web API
+    /// instead of the local SQLite database.
     /// </summary>
     public class PersonData
     {
-        private SQLiteAsyncConnection? database;
+        // Web API address (change the port to match your running API)
+        private const string ApiUrl = "http://localhost:5046/api/Person";
 
-        // Opens the database and creates the table the first time it's needed
-        private async Task Init()
-        {
-            if (database is not null)
-            {
-                return;
-            }
-
-            database = new SQLiteAsyncConnection(DatabaseConstants.DatabasePath, DatabaseConstants.Flags);
-            await database.CreateTableAsync<Person>();
-        }
-
-        // Returns every person in the database
+        // Gets every person from the web API
         public async Task<List<Person>> GetPeopleAsync()
         {
-            await Init();
-            return await database!.Table<Person>().ToListAsync();
+            HttpClient client;
+
+            try
+            {
+                client = new HttpClient();
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/json");
+                List<Person> people = new List<Person>();
+
+                var response = await client.GetAsync(ApiUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(content))
+                    {
+                        people = JsonConvert.DeserializeObject<List<Person>>(content) ?? new List<Person>();
+                    }
+                }
+
+                return people;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        // Returns one person by ID (not used in this app, example only)
-        public async Task<Person> GetPersonAsync(int id)
-        {
-            await Init();
-            return await database!.Table<Person>().Where(i => i.ID == id).FirstOrDefaultAsync();
-        }
-
-        // Adds a new person, or updates one that already has an ID
+        // Sends a new person to the web API to be saved
         public async Task<int> SavePersonAsync(Person person)
         {
-            await Init();
+            HttpClient client;
 
-            if (person.ID != 0)
+            try
             {
-                // Update an existing person
-                return await database!.UpdateAsync(person);
-            }
-            else
-            {
-                // Save a new person
-                return await database!.InsertAsync(person);
-            }
-        }
+                client = new HttpClient();
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/json");
 
-        // Deletes a person (not used in this app, example only)
-        public async Task<int> DeletePersonAsync(Person person)
-        {
-            await Init();
-            return await database!.DeleteAsync(person);
+                // Turn the person into JSON, then into bytes to send
+                var content = JsonConvert.SerializeObject(person);
+                var buffer = System.Text.Encoding.UTF8.GetBytes(content);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType =
+                    new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+                HttpResponseMessage response = await client.PostAsync(ApiUrl, byteContent);
+                return response.IsSuccessStatusCode ? 1 : 0;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
