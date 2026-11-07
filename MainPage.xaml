@@ -4,81 +4,81 @@
              xmlns:models="clr-namespace:MAUI_Data_Access.Models"
              x:Class="MAUI_Data_Access.MainPage">
 
-    <VerticalStackLayout
-        Padding="30,0"
-        Spacing="25">
+       <VerticalStackLayout
+              Padding="30,0"
+              Spacing="25">
 
-        <Label
-            Text="Brandon Lazala - Local Storage"
-            Style="{StaticResource Headline}"
-            SemanticProperties.HeadingLevel="Level1"/>
+              <Label
+                     Text="Brandon Lazala - Local Storage"
+                     Style="{StaticResource Headline}"
+                     SemanticProperties.HeadingLevel="Level1"/>
 
-        <!-- Input form: labels in column 0, fields in column 1 -->
-        <Grid RowDefinitions="Auto,Auto,Auto"
-              ColumnDefinitions="Auto,*"
-              RowSpacing="10"
-              ColumnSpacing="10">
+              <!-- Input form: labels in column 0, fields in column 1 -->
+              <Grid RowDefinitions="Auto,Auto,Auto"
+                    ColumnDefinitions="Auto,*"
+                    RowSpacing="10"
+                    ColumnSpacing="10">
 
-            <Label Grid.Row="0"
-                    Grid.Column="0"
-                   Text="First Name:"
-                   VerticalTextAlignment="Center"
-                   SemanticProperties.HeadingLevel="Level2"/>
-            <Entry Grid.Row="0"
-                    Grid.Column="1"
-                   x:Name="txtFirstName"
-                   Placeholder="Enter your first name"/>
+                     <Label Grid.Row="0"
+                                   Grid.Column="0"
+                            Text="First Name:"
+                            VerticalTextAlignment="Center"
+                            SemanticProperties.HeadingLevel="Level2"/>
+                     <Entry Grid.Row="0"
+                                   Grid.Column="1"
+                            x:Name="txtFirstName"
+                            Placeholder="Enter your first name"/>
 
-            <Label Grid.Row="1"
-                    Grid.Column="0"
-                   Text="Last Name:"
-                   VerticalTextAlignment="Center"
-                   SemanticProperties.HeadingLevel="Level2"/>
-            <Entry Grid.Row="1"
-                    Grid.Column="1"
-                   x:Name="txtLastName"
-                   Placeholder="Enter your last name"/>
+                     <Label Grid.Row="1"
+                                   Grid.Column="0"
+                            Text="Last Name:"
+                            VerticalTextAlignment="Center"
+                            SemanticProperties.HeadingLevel="Level2"/>
+                     <Entry Grid.Row="1"
+                                   Grid.Column="1"
+                            x:Name="txtLastName"
+                            Placeholder="Enter your last name"/>
 
-            <Label Grid.Row="2"
-                    Grid.Column="0"
-                   Text="Date of Birth:"
-                   VerticalTextAlignment="Center"
-                   SemanticProperties.HeadingLevel="Level2"/>
-            <DatePicker Grid.Row="2"
-                    Grid.Column="1"
-                        x:Name="dpDateOfBirth"
-                        Format="MM-dd-yyyy"/>
-        </Grid>
+                     <Label Grid.Row="2"
+                                   Grid.Column="0"
+                            Text="Date of Birth:"
+                            VerticalTextAlignment="Center"
+                            SemanticProperties.HeadingLevel="Level2"/>
+                     <DatePicker Grid.Row="2"
+                                   Grid.Column="1"
+                                 x:Name="dpDateOfBirth"
+                                 Format="MM-dd-yyyy"/>
+              </Grid>
 
-        <Button
-            x:Name="btnSave"
-            Text="Save Person"
-            HorizontalOptions="Center"
-            Clicked="OnSaveClicked"/>
+              <Button
+                     x:Name="btnSave"
+                     Text="Save Person"
+                     HorizontalOptions="Center"
+                     Clicked="OnSaveClicked"/>
 
-        <!-- List of saved people, bound to the People collection -->
-        <CollectionView
-            VerticalOptions="Fill"
-            ItemsSource="{Binding People}"
-            SelectionMode="Single">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Person">
-                    <Grid ColumnDefinitions="*,*,Auto"
-                            Padding="20">
-                        <Label Grid.Column="0"
-                               Text="{Binding FirstName}"
-                               VerticalTextAlignment="Center"/>
-                        <Label Grid.Column="1"
-                               Text="{Binding LastName}"
-                               VerticalTextAlignment="Center"/>
-                        <Label Grid.Column="2"
-                               Text="{Binding DoB, StringFormat='{0:MM-dd-yyyy}'}"
-                               VerticalTextAlignment="Center"/>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+              <!-- List of saved people, bound to the People collection -->
+              <CollectionView
+                     VerticalOptions="Fill"
+                     ItemsSource="{Binding People}"
+                     SelectionMode="Single">
+                     <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Person">
+                                   <Grid ColumnDefinitions="*,*,Auto"
+                                                 Padding="20">
+                                          <Label Grid.Column="0"
+                                                 Text="{Binding FirstName}"
+                                                 VerticalTextAlignment="Center"/>
+                                          <Label Grid.Column="1"
+                                                 Text="{Binding LastName}"
+                                                 VerticalTextAlignment="Center"/>
+                                          <Label Grid.Column="2"
+                                                 Text="{Binding DoB, StringFormat='{0:MM-dd-yyyy}'}"
+                                                 VerticalTextAlignment="Center"/>
+                                   </Grid>
+                            </DataTemplate>
+                     </CollectionView.ItemTemplate>
+              </CollectionView>
 
-    </VerticalStackLayout>
+       </VerticalStackLayout>
 
 </ContentPage>
